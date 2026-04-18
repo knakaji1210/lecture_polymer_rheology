@@ -6,19 +6,19 @@ import matplotlib.pyplot as plt
 tau_R = 1.0  # Rouse緩和時間（これでスケールしたことにする）
 
 # short-time limit of the Rouse relaxation modulus
-def G_Rouse_s(t):
+def G_Rouse_s(t, tau_R):
     G_s = np.sqrt(np.pi/8) * (t/tau_R)**(-1/2)
     return G_s  
 
-def G_Rouse_mode(t, p):
+def G_Rouse_mode(t, p, tau_R):
     tau_p = 1/(2*p**2) * tau_R
     G_p = np.exp(-t/tau_p)
     return G_p
 
-def G_Rouse(t, p_max):
+def G_Rouse(t, p_max, tau_R):
     G = np.zeros_like(t)
     for p in range(1, p_max+1):
-        G += G_Rouse_mode(t, p)
+        G += G_Rouse_mode(t, p, tau_R)
     return G
 
 def reqParams():
@@ -32,15 +32,15 @@ if __name__=='__main__':
     p_max  = reqParams()
     t = np.logspace(-2, 1, 100)  # 時間tの刻み
     logt = np.log10(t)
-    G_s = G_Rouse_s(t)
+    G_s = G_Rouse_s(t, tau_R)
     logG_s = np.log10(G_s)
-    G = G_Rouse(t, p_max)
+    G = G_Rouse(t, p_max, tau_R)
     logG = np.log10(G)
-    G1 = G_Rouse(t, 1)
+    G1 = G_Rouse(t, 1, tau_R)
     logG1 = np.log10(G1)
 
     title = r'Relaxation modulus of Rouse model ($p_{{\max}}$ = {0:.0f})'.format(p_max)
-    xlabel = r'$\log_{10}(-t/\tau_R)$'
+    xlabel = r'$\log_{10}(t/\tau_R)$'
     ylabel = r'$\log_{10}(G(t)/G_0)$'
     savefile = './png/Rouse_relaxation_modulus_Pmax{0:.0f}.png'.format(p_max)
 

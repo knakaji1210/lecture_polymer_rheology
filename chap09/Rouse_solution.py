@@ -9,14 +9,14 @@ import matplotlib.animation as animation
 N = 100  # モノマー数
 n = np.linspace(0, N, N+1)  # セグメント番号
 
-P = 5  # 描画する固有モード数
+P = 10  # 描画する固有モード数
 p = np.arange(1, P + 1)  # 固有モード番号
 
 amp_p = [random.uniform(0.5, 1.0) for _ in p]  # 各モードの振幅（0.5から1.0の間でランダムに生成）
 print(amp_p)
 
 tau_R = 1.0  # Rouse緩和時間（これでスケールしたことにする）
-tau_p = tau_R / (2 * p ** 2)  # 各モードの緩和時間
+tau_p = tau_R / p**2  # 各モードの緩和時間
 
 # データの準備
 x = np.pi * n / N                   # セグメント位置（グラフの横軸）
