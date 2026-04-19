@@ -10,13 +10,11 @@ import matplotlib.animation as animation
 N = 100  # モノマー数
 n = np.linspace(0, N, N+1)  # セグメント番号
 
-P = 20  # 描画する固有モード数
+P = 5  # 描画する固有モード数
 p = np.arange(1, P + 1)  # 固有モード番号
 
-amp_x_p = [random.uniform(-1.0, 1.0) for _ in p]  # 各モードの振幅（-1.0から1.0の間でランダムに生成）
-amp_y_p = [random.uniform(-1.0, 1.0) for _ in p]  # 各モードの振幅（-1.0から1.0の間でランダムに生成）
-amp_x_p[0] = 1.0  # p=1のモードは振幅1に固定
-amp_y_p[0] = 1.0  # p=1のモードは振幅1に固定
+amp_x_p = [random.uniform(0.5, 1.0) for _ in p]  # 各モードの振幅（0.5から1.0の間でランダムに生成）
+amp_y_p = [random.uniform(0.5, 1.0) for _ in p]  # 各モードの振幅（0.5から1.0の間でランダムに生成）
 
 tau_R = 1.0  # Rouse緩和時間（これでスケールしたことにする）
 tau_p = tau_R / (2 * p ** 2)  # 各モードの緩和時間
@@ -63,12 +61,6 @@ ax.set_ylabel(ylabel)
 ax.grid()
 ax.set_axisbelow(True)
 
-x_lim = np.max(np.abs(rouse_x_solution(x, 0, p)))
-y_lim = np.max(np.abs(rouse_y_solution(y, 0, p)))
-lim = max(x_lim, y_lim) * 1.5  # xとyの両方の最大振幅の1.5倍を範囲に設定
-ax.set_xlim(-lim, lim)  # x軸の範囲を固定
-ax.set_ylim(-lim, lim)  # y軸の範囲を固定
-
 line, = ax.plot(rouse_x_solution(x, 0, p), rouse_y_solution(y, 0, p), 'b-', linewidth=1, zorder=1) # 初期フレーム
 dot = ax.scatter(rouse_x_solution(x, 0, p), rouse_y_solution(y, 0, p), c='red', s=5, zorder=2)  # 動く点（ビーズの位置を示す）
 
@@ -82,8 +74,8 @@ def update(frame):
     return line, dot, 
 
 # アニメーションの作成
-ani = animation.FuncAnimation(fig, update, frames=len(t), interval=100, blit=True)
+ani = animation.FuncAnimation(fig, update, frames=len(t), interval=50, blit=True)
 
-ani.save(savefile, dpi=300)
+#ani.save(savefile, dpi=300)
 
 plt.show()

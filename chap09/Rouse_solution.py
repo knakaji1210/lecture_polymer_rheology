@@ -9,18 +9,18 @@ import matplotlib.animation as animation
 N = 100  # モノマー数
 n = np.linspace(0, N, N+1)  # セグメント番号
 
-P = 10  # 描画する固有モード数
+P = 20  # 描画する固有モード数
 p = np.arange(1, P + 1)  # 固有モード番号
 
-amp_p = [random.uniform(0.5, 1.0) for _ in p]  # 各モードの振幅（0.5から1.0の間でランダムに生成）
-print(amp_p)
+amp_p = [random.uniform(-1.0, 1.0) for _ in p]  # 各モードの符号付き振幅（-1.0から1.0の間でランダムに生成）
+amp_p[0] = 1.0  # p=1のモードは振幅1に固定
 
 tau_R = 1.0  # Rouse緩和時間（これでスケールしたことにする）
 tau_p = tau_R / p**2  # 各モードの緩和時間
 
 # データの準備
 x = np.pi * n / N                   # セグメント位置（グラフの横軸）
-t = np.linspace(0, tau_R * 1.5, 500)  # 時間tの刻み（アニメーションのフレーム数）
+t = np.linspace(0, tau_R * 2.0, 500)  # 時間tの刻み（アニメーションのフレーム数）
 
 # 関数定義
 def rouse_x(x, p, i):
@@ -65,7 +65,7 @@ def update(frame):
     return line, dot, 
 
 # アニメーションの作成
-ani = animation.FuncAnimation(fig, update, frames=len(t), interval=50, blit=True)
+ani = animation.FuncAnimation(fig, update, frames=len(t), interval=100, blit=True)
 
 ani.save(savefile, dpi=300)
 
